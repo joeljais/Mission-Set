@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Live verification dashboard for Volcanic Outlands Playwright testing" />
+  <meta name="theme-color" content="#06080d" />
+  <title>VOLCANIC OPS // Live Verification Dashboard</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>▲</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+
+    <!-- ── Top Bar ─────────────────────────────────────── -->
+    <header id="topbar" role="banner">
+      <div class="topbar-left">
+        <div class="logo-glyph" aria-hidden="true">&#x25B2;</div>
+        <div class="logo-text">
+          <span class="logo-title">VOLCANIC OPS</span>
+          <span class="logo-sub">LIVE VERIFICATION DASHBOARD</span>
+        </div>
+      </div>
+
+      <div class="topbar-stats" role="status" aria-label="Verification statistics">
+        <div class="stat-chip" id="stat-total" title="Total verification checks">
+          <span class="chip-label">CHECKS</span>
+          <span class="chip-value" id="val-total">&mdash;</span>
+        </div>
+        <div class="stat-chip pass" id="stat-pass" title="Checks that passed">
+          <span class="chip-label">PASSED</span>
+          <span class="chip-value" id="val-pass">&mdash;</span>
+        </div>
+        <div class="stat-chip fail" id="stat-fail" title="Checks that failed">
+          <span class="chip-label">FAILED</span>
+          <span class="chip-value" id="val-fail">&mdash;</span>
+        </div>
+        <div class="stat-chip" id="stat-rate" title="Overall pass rate percentage">
+          <span class="chip-label">PASS RATE</span>
+          <span class="chip-value" id="val-rate">&mdash;</span>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div id="view-toggle" class="hidden" role="group" aria-label="View mode">
+          <button class="vt-btn active" id="btn-view-summary" aria-pressed="true">SUMMARY</button>
+          <button class="vt-btn" id="btn-view-live" aria-pressed="false">LIVE TABLE</button>
+        </div>
+        <div class="pulse-ring" id="pulse" role="img" aria-label="Connection status indicator"></div>
+        <span id="status-label" aria-live="polite">WAITING FOR DATA</span>
+        <span id="last-updated" aria-live="off">&mdash;</span>
+      </div>
+    </header>
+
+    <!-- ── Main Layout ────────────────────────────────── -->
+    <div class="layout">
+
+      <!-- ── Sidebar ─────────────────────────────────── -->
+      <aside id="sidebar" role="complementary" aria-label="Mission list">
+        <div class="sidebar-header">MISSION STATUS</div>
+        <nav id="mission-nav" aria-label="Mission navigation">
+          <!-- populated by JS -->
+        </nav>
+        <div class="sidebar-footer">
+          <div class="footer-label">VOLCANIC OUTLANDS</div>
+          <div class="footer-region">OCEANIA THEATRE</div>
+        </div>
+      </aside>
+
+      <!-- ── Main Content ─────────────────────────────── -->
+      <main id="main-content" role="main">
+        <div id="mission-header">
+          <div id="mission-title">SELECT A MISSION</div>
+          <div id="mission-meta"></div>
+        </div>
+
+        <!-- Summary bar -->
+        <div id="mission-summary-bar" class="hidden" role="region" aria-label="Mission summary">
+          <div class="msbar-item">
+            <span class="msbar-label">CLICKS VERIFIED</span>
+            <span class="msbar-value" id="ms-clicks">0</span>
+          </div>
+          <div class="msbar-item">
+            <span class="msbar-label">XP / ENGAGE</span>
+            <span class="msbar-value" id="ms-xp">&mdash;</span>
+          </div>
+          <div class="msbar-item">
+            <span class="msbar-label">SUPPLIES / ENGAGE</span>
+            <span class="msbar-value" id="ms-sup">&mdash;</span>
+          </div>
+          <div class="msbar-item">
+            <span class="msbar-label">CASH RANGE</span>
+            <span class="msbar-value" id="ms-cash">&mdash;</span>
+          </div>
+          <div class="msbar-item">
+            <span class="msbar-label">MISSION STATUS</span>
+            <span class="msbar-value" id="ms-status">IN PROGRESS</span>
+          </div>
+        </div>
+
+        <!-- Execution Summary (shown when all missions complete) -->
+        <div id="exec-summary" class="hidden" role="region" aria-label="Execution summary report">
+          <div class="exec-banner" id="exec-banner" role="status">
+            <div class="exec-banner-icon" id="exec-banner-icon" aria-hidden="true">&#x25B2;</div>
+            <div class="exec-banner-text">
+              <div class="exec-banner-title" id="exec-banner-title">EXECUTION COMPLETE</div>
+              <div class="exec-banner-sub" id="exec-banner-sub">All missions processed</div>
+            </div>
+            <div class="exec-banner-status" id="exec-banner-status"></div>
+          </div>
+
+          <div class="exec-stats-row">
+            <div class="exec-stat">
+              <span class="exec-stat-label">DURATION</span>
+              <span class="exec-stat-value" id="exec-duration">&mdash;</span>
+            </div>
+            <div class="exec-stat">
+              <span class="exec-stat-label">START TIME</span>
+              <span class="exec-stat-value" id="exec-start">&mdash;</span>
+            </div>
+            <div class="exec-stat">
+              <span class="exec-stat-label">END TIME</span>
+              <span class="exec-stat-value" id="exec-end">&mdash;</span>
+            </div>
+            <div class="exec-stat">
+              <span class="exec-stat-label">MISSIONS</span>
+              <span class="exec-stat-value" id="exec-missions-count">&mdash;</span>
+            </div>
+          </div>
+
+          <div class="exec-checks-row" role="group" aria-label="Check results">
+            <div class="exec-checks-item total">
+              <span class="exec-checks-num" id="exec-total">0</span>
+              <span class="exec-checks-lbl">TOTAL CHECKS</span>
+            </div>
+            <div class="exec-checks-item pass">
+              <span class="exec-checks-num" id="exec-passed">0</span>
+              <span class="exec-checks-lbl">PASSED</span>
+            </div>
+            <div class="exec-checks-item fail">
+              <span class="exec-checks-num" id="exec-failed">0</span>
+              <span class="exec-checks-lbl">FAILED</span>
+            </div>
+            <div class="exec-checks-item rate">
+              <span class="exec-checks-num" id="exec-rate">0%</span>
+              <span class="exec-checks-lbl">PASS RATE</span>
+            </div>
+          </div>
+
+          <div class="exec-section-title">RESOURCE TOTALS</div>
+          <div class="exec-resources-row" role="group" aria-label="Resource totals">
+            <div class="exec-res-item">
+              <span class="exec-res-label">TOTAL XP EARNED</span>
+              <span class="exec-res-value pass" id="exec-total-xp">&mdash;</span>
+            </div>
+            <div class="exec-res-item">
+              <span class="exec-res-label">TOTAL SUPPLIES USED</span>
+              <span class="exec-res-value" id="exec-total-sup">&mdash;</span>
+            </div>
+            <div class="exec-res-item">
+              <span class="exec-res-label">TOTAL CASH EARNED</span>
+              <span class="exec-res-value" id="exec-total-cash">&mdash;</span>
+            </div>
+          </div>
+
+          <div class="exec-section-title">MISSION BREAKDOWN</div>
+          <div id="exec-mission-grid" class="exec-mission-grid" role="list" aria-label="Mission breakdown"></div>
+
+          <div id="exec-failures-section" class="hidden">
+            <div class="exec-section-title fail-title">FAILED CHECKS DETAIL</div>
+            <div id="exec-failures-list" class="exec-failures-list" role="list" aria-label="Failed checks"></div>
+          </div>
+
+          <div class="exec-footer">
+            <span class="exec-footer-label">VOLCANIC OUTLANDS VERIFICATION REPORT</span>
+            <span class="exec-footer-id" id="exec-footer-id"></span>
+          </div>
+        </div>
+
+        <!-- Table area (live view) -->
+        <div id="table-container">
+          <div id="empty-state">
+            <div class="empty-icon" aria-hidden="true">&#x25C8;</div>
+            <div class="empty-title">NO DATA YET</div>
+            <div class="empty-sub">Run <code>py test_volcanic_clean.py</code> to begin live verification</div>
+          </div>
+          <table id="results-table" class="hidden" aria-label="Verification results">
+            <caption class="sr-only">Live verification results for each mission engage click</caption>
+            <thead>
+              <tr>
+                <th class="col-click" scope="col">#</th>
+                <th class="col-time" scope="col">TIME</th>
+                <th class="col-type" scope="col">TYPE</th>
+                <th class="col-phase" scope="col">PHASE</th>
+                <th class="col-xp" scope="col">XP BEFORE &rarr; AFTER</th>
+                <th class="col-sup" scope="col">SUPPLIES BEFORE &rarr; AFTER</th>
+                <th class="col-xpv" scope="col">XP CHECK</th>
+                <th class="col-supv" scope="col">SUP CHECK</th>
+                <th class="col-cash" scope="col">CASH REWARD</th>
+                <th class="col-status" scope="col">STATUS</th>
+              </tr>
+            </thead>
+            <tbody id="results-body">
+            </tbody>
+          </table>
+        </div>
+      </main>
+
+    </div><!-- .layout -->
+  </div><!-- #app -->
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

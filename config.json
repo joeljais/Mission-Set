@@ -1,0 +1,127 @@
+{
+  "uid": "JH04",
+  "SimulationKey": "",
+  "game_url": "https://remote-206-8888.dnapps.in/mobile_projects/battlecry_2026/battlecry_html5_sandbox_muhsin/MyApp/app.index.html",
+  "api_host": "remote-206-3070.dnapps.in",
+  "origin": "https://remote-206-8888.dnapps.in",
+  "browser": {
+    "headless": false,
+    "viewport_width": 1280,
+    "viewport_height": 800
+  },
+  "verify_every_n_engages": 5,
+  "ops_doc": {
+    "attain": {
+      "description": "XP gained per Engage click. Verified against mission.xp_gain.",
+      "api_endpoint": "user/get",
+      "db_field": "_ls.xp"
+    },
+    "consume": {
+      "description": "Supplies spent per Engage click. Verified against mission.supplies_cost.",
+      "api_endpoint": "user/get",
+      "db_field": "_ls.s"
+    },
+    "rewards": {
+      "description": "Cash earned on full mission completion. Must fall within [cash_min, cash_max].",
+      "api_endpoint": "user/get",
+      "db_field": "_ls.c"
+    },
+    "unlock_levels": {
+      "description": "Minimum player level required to access each mission. Checked before entering.",
+      "api_endpoint": "user/get",
+      "db_field": "_ls.level"
+    },
+    "loot_unit": {
+      "description": "Special unit rewarded on specific mission completion (e.g. Mission 5). Has name, class, attack, defence, upkeep."
+    }
+  },
+  "missions": [
+    {
+      "spec_steps": "10-18",
+      "id": 1,
+      "name": "Capture the Lava Watch Post",
+      "unlock_level": 160,
+      "xp_gain": 80,
+      "supplies_cost": 90,
+      "cash_min": 9200000,
+      "cash_max": 15000000
+    },
+    {
+      "spec_steps": "19-27",
+      "id": 2,
+      "name": "Raid the Ashfield Supply Camp",
+      "unlock_level": 165,
+      "xp_gain": 123,
+      "supplies_cost": 128,
+      "cash_min": 63000000,
+      "cash_max": 88000000
+    },
+    {
+      "spec_steps": "28-36",
+      "id": 3,
+      "name": "Breach the Magma Bunker Complex",
+      "unlock_level": 170,
+      "xp_gain": 145,
+      "supplies_cost": 180,
+      "cash_min": 99900000,
+      "cash_max": 490000000
+    },
+    {
+      "spec_steps": "37-45",
+      "id": 4,
+      "name": "Intercept the Outlands Smuggler Aircraft",
+      "unlock_level": 175,
+      "xp_gain": 183,
+      "supplies_cost": 208,
+      "cash_min": 450000000,
+      "cash_max": 850000000
+    },
+    {
+      "spec_steps": "46-54",
+      "id": 5,
+      "name": "Capture the Volcanic Torpedo Skiff",
+      "unlock_level": 175,
+      "xp_gain": 230,
+      "supplies_cost": 250,
+      "cash_min": 530000000,
+      "cash_max": 930000000,
+      "loot_unit": {
+        "name": "Volcanic Torpedo Skiff",
+        "class": "SPECIAL NAVY UNIT",
+        "attack": 170,
+        "defence": 90,
+        "upkeep": 600000
+      }
+    },
+    {
+      "spec_steps": "55-63",
+      "id": 6,
+      "name": "Collapse the Hidden Lava Tunnel Arsenal",
+      "unlock_level": 180,
+      "xp_gain": 235,
+      "supplies_cost": 260,
+      "cash_min": 800000000,
+      "cash_max": 990000000
+    },
+    {
+      "spec_steps": "64-72",
+      "id": 7,
+      "name": "Hunt the Outlands Raider Squad",
+      "unlock_level": 185,
+      "xp_gain": 250,
+      "supplies_cost": 295,
+      "cash_min": 920000000,
+      "cash_max": 1600000000
+    },
+    {
+      "spec_steps": "73-81",
+      "id": 8,
+      "name": "Burn the Volcanic Weapons Foundry",
+      "unlock_level": 190,
+      "xp_gain": 315,
+      "supplies_cost": 315,
+      "cash_min": 950000000,
+      "cash_max": 2600000000
+    }
+  ]
+}
